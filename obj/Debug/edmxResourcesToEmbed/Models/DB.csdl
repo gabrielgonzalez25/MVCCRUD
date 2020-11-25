@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="userModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="userEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="cstate" EntityType="userModel.cstate" />
+    <EntitySet Name="usermvc" EntityType="userModel.usermvc" />
+    <AssociationSet Name="FK_usermvc_usermvc" Association="userModel.FK_usermvc_usermvc">
+      <End Role="usermvc" EntitySet="usermvc" />
+      <End Role="usermvc1" EntitySet="usermvc" />
+    </AssociationSet>
+    <AssociationSet Name="FK_usermvc_cstate" Association="userModel.FK_usermvc_cstate">
+      <End Role="cstate" EntitySet="cstate" />
+      <End Role="usermvc" EntitySet="usermvc" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="cstate">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="usermvc" Relationship="userModel.FK_usermvc_cstate" FromRole="cstate" ToRole="usermvc" />
+  </EntityType>
+  <EntityType Name="usermvc">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="password" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="idState" Type="Int32" />
+    <NavigationProperty Name="usermvc1" Relationship="userModel.FK_usermvc_usermvc" FromRole="usermvc" ToRole="usermvc1" />
+    <NavigationProperty Name="usermvc2" Relationship="userModel.FK_usermvc_usermvc" FromRole="usermvc1" ToRole="usermvc" />
+    <NavigationProperty Name="cstate" Relationship="userModel.FK_usermvc_cstate" FromRole="usermvc" ToRole="cstate" />
+    <Property Name="edad" Type="Int32" />
+  </EntityType>
+  <Association Name="FK_usermvc_usermvc">
+    <End Type="userModel.usermvc" Role="usermvc" Multiplicity="1" />
+    <End Type="userModel.usermvc" Role="usermvc1" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="usermvc">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="usermvc1">
+        <PropertyRef Name="id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_usermvc_cstate">
+    <End Type="userModel.cstate" Role="cstate" Multiplicity="0..1" />
+    <End Type="userModel.usermvc" Role="usermvc" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cstate">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="usermvc">
+        <PropertyRef Name="idState" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

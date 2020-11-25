@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="userModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="cstate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="usermvc">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="idState" Type="int" />
+          <Property Name="edad" Type="int" />
+        </EntityType>
+        <Association Name="FK_usermvc_cstate">
+          <End Role="cstate" Type="Self.cstate" Multiplicity="0..1" />
+          <End Role="usermvc" Type="Self.usermvc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cstate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="usermvc">
+              <PropertyRef Name="idState" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="userModelStoreContainer">
+          <EntitySet Name="cstate" EntityType="Self.cstate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="usermvc" EntityType="Self.usermvc" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_usermvc_cstate" Association="Self.FK_usermvc_cstate">
+            <End Role="cstate" EntitySet="cstate" />
+            <End Role="usermvc" EntitySet="usermvc" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="userModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="userEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="cstate" EntityType="userModel.cstate" />
+          <EntitySet Name="usermvc" EntityType="userModel.usermvc" />
+          <AssociationSet Name="FK_usermvc_usermvc" Association="userModel.FK_usermvc_usermvc">
+            <End Role="usermvc" EntitySet="usermvc" />
+            <End Role="usermvc1" EntitySet="usermvc" />
+          </AssociationSet>
+          <AssociationSet Name="FK_usermvc_cstate" Association="userModel.FK_usermvc_cstate">
+            <End Role="cstate" EntitySet="cstate" />
+            <End Role="usermvc" EntitySet="usermvc" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="cstate">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="usermvc" Relationship="userModel.FK_usermvc_cstate" FromRole="cstate" ToRole="usermvc" />
+        </EntityType>
+        <EntityType Name="usermvc">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="idState" Type="Int32" />
+          <NavigationProperty Name="usermvc1" Relationship="userModel.FK_usermvc_usermvc" FromRole="usermvc" ToRole="usermvc1" />
+          <NavigationProperty Name="usermvc2" Relationship="userModel.FK_usermvc_usermvc" FromRole="usermvc1" ToRole="usermvc" />
+          <NavigationProperty Name="cstate" Relationship="userModel.FK_usermvc_cstate" FromRole="usermvc" ToRole="cstate" />
+          <Property Name="edad" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_usermvc_usermvc">
+          <End Type="userModel.usermvc" Role="usermvc" Multiplicity="1" />
+          <End Type="userModel.usermvc" Role="usermvc1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="usermvc">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="usermvc1">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_usermvc_cstate">
+          <End Type="userModel.cstate" Role="cstate" Multiplicity="0..1" />
+          <End Type="userModel.usermvc" Role="usermvc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cstate">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="usermvc">
+              <PropertyRef Name="idState" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="userModelStoreContainer" CdmEntityContainer="userEntities">
+          <EntitySetMapping Name="cstate">
+            <EntityTypeMapping TypeName="userModel.cstate">
+              <MappingFragment StoreEntitySet="cstate">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usermvc">
+            <EntityTypeMapping TypeName="userModel.usermvc">
+              <MappingFragment StoreEntitySet="usermvc">
+                <ScalarProperty Name="edad" ColumnName="edad" />
+                <ScalarProperty Name="idState" ColumnName="idState" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
